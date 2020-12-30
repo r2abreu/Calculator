@@ -28,7 +28,11 @@ function handleClick() {
 
 function numericalHandle(value) {
 	if (input.textContent.length < 14) {
-		input.textContent += value.toString();
+		if (input.textContent === '0') {
+			input.textContent = value.toString();
+		} else {
+			input.textContent += value.toString();
+		}
 		// input.textContent = format(inputState);
 	} else {
 		stopPrompt();
@@ -38,19 +42,25 @@ function numericalHandle(value) {
 function operatorHandle(value) {
 	switch (value) {
 		case '.':
+			input.textContent += '.';
 			return 'decimal';
 		case '+':
 			input.textContent += '+';
 			return 'addition';
 		case '-':
+			input.textContent += '-';
 			return 'substracion';
 		case 'X':
+			input.textContent += 'x';
 			return 'multiplication';
 		case '÷':
+			input.textContent += '÷';
 			return 'division';
 		case '=':
+			input.textContent += '=';
 			return 'equal';
 		case '⧏':
+			input.textContent = eraseLastChar(input.textContent);
 			return 'erase';
 		case 'C':
 			return 'clear';
@@ -87,4 +97,14 @@ function calculate() {
 	if (operators[0] === '+') {
 		output.textContent = operands[0] + operands[1];
 	}
+}
+
+function eraseLastChar(str) {
+	if (str.length === 1) {
+		str = '0';
+	} else {
+		str = str.substring(0, str.length - 1);
+	}
+
+	return str;
 }
