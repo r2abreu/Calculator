@@ -16,10 +16,12 @@ let output = document.querySelector('.output');
 
 function handleClick() {
 	let buttonValue = parseInt(this.firstChild.textContent);
+	// If the button's value is not a number
 	if (isNaN(buttonValue)) {
 		operatorHandle(this.firstChild.textContent);
+		// If the button's value is a number
 	} else {
-		if (buttonValue) {
+		if (buttonValue || buttonValue === 0) {
 			numericalHandle(buttonValue);
 			calculate();
 		}
@@ -27,11 +29,21 @@ function handleClick() {
 }
 
 function numericalHandle(value) {
+	console.log(value);
+	// If the length of the string is longer than 14 characters
 	if (input.textContent.length < 14) {
-		if (input.textContent === '0') {
+		// If the value is 0 and the string is longer `than 1 digit
+		if (value === 0 && input.textContent.length > 1) {
+			input.textContent += value.toString();
+			// If the value is 0 and the string ends in 0
+		} else if (value === 0 && input.textContent.endsWith('0')) {
 			input.textContent = value.toString();
 		} else {
-			input.textContent += value.toString();
+			if (input.textContent.charAt(0) === '0') {
+				input.textContent = value.toString();
+			} else {
+				input.textContent += value.toString();
+			}
 		}
 		// input.textContent = format(inputState);
 	} else {
@@ -40,21 +52,24 @@ function numericalHandle(value) {
 }
 
 function operatorHandle(value) {
+	let str = input.textContent;
 	switch (value) {
 		case '.':
-			input.textContent += '.';
+			if (!str.endsWith('.') && !str.includes('.')) {
+				input.textContent += '.';
+			}
 			return 'decimal';
 		case '+':
-			input.textContent += '+';
+			noConsecutiveOperator(str, '+');
 			return 'addition';
 		case '-':
-			input.textContent += '-';
-			return 'substracion';
-		case 'X':
-			input.textContent += 'x';
+			noConsecutiveOperator(str, '-');
+			return 'substraction';
+		case 'x':
+			noConsecutiveOperator(str, 'x');
 			return 'multiplication';
 		case '÷':
-			input.textContent += '÷';
+			noConsecutiveOperator(str, '÷');
 			return 'division';
 		case '=':
 			input.textContent += '=';
@@ -63,8 +78,10 @@ function operatorHandle(value) {
 			input.textContent = eraseLastChar(input.textContent);
 			return 'erase';
 		case 'C':
+			input.textContent = '0';
 			return 'clear';
 		case '%':
+			input.textContent += '%';
 			return 'percentual';
 		default:
 			console.log('Operation Error');
@@ -93,7 +110,6 @@ function calculate() {
 	const inputSplitted = input.textContent.split(/d*/);
 	const operators = inputSplitted.filter((digit) => isNaN(digit));
 	const operands = inputSplitted.map((digit) => parseInt(digit)).filter((digit) => !isNaN(digit));
-	console.log(operands, operators);
 	if (operators[0] === '+') {
 		output.textContent = operands[0] + operands[1];
 	}
@@ -107,4 +123,30 @@ function eraseLastChar(str) {
 	}
 
 	return str;
+}
+
+function isPreceededByOperator(str) {
+	if (isOperator(str.charAt(str.length - 1))) {
+		return true;
+	}
+
+	return false;
+}
+
+function isOperator(char) {
+	if (char === '+' || char === '-' || char === '%' || char === 'x' || char === '÷' || char === '.') {
+		return true;
+	}
+
+	return false;
+}
+
+function noConsecutiveOperator(str, operator) {
+	if (isPreceededByOperator(str)) {
+		str = eraseLastChar(str);
+		str += operator;
+		input.textContent = str;
+	} else {
+		input.textContent += operator;
+	}
 }
