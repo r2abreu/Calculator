@@ -1,0 +1,119 @@
+html {
+	box-sizing: inherit;
+}
+
+*,
+::before,
+::after {
+	box-sizing: inherit;
+}
+
+body {
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	font-size: 1.6rem;
+	color: #424242;
+	font-weight: 400;
+}
+
+body > div {
+	display: grid;
+	grid-template-areas: "input input input input" "accumulator accumulator accumulator accumulator"
+		"C divider multiplier eraser" "seven eight nine minus" "four five six plus" "one two three equal"
+		"percentage zero period equal";
+	width: 30%;
+	height: 600px;
+	margin: auto;
+	margin-top: 1em;
+	width: 400px;
+	border: 1px solid #6784d92d;
+}
+
+div > div {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+div > div:not(:last-of-type):not(:nth-of-type(20)) {
+	border: 1px solid rgba(215, 215, 215, 0.521);
+}
+
+div > div:hover {
+	background-color: #f0ecec;
+}
+
+div > div:first-of-type {
+	grid-area: percentage;
+}
+div > div:nth-of-type(2) {
+	grid-area: zero;
+}
+div > div:nth-of-type(3) {
+	grid-area: period;
+}
+div > div:nth-of-type(4) {
+	background-color: #6784d9;
+	color: #fff;
+	grid-area: equal;
+}
+
+div > div:nth-of-type(4):hover {
+	background-color: #7f95da;
+}
+div > div:nth-of-type(5) {
+	grid-area: one;
+}
+div > div:nth-of-type(6) {
+	grid-area: two;
+}
+div > div:nth-of-type(7) {
+	grid-area: three;
+}
+div > div:nth-of-type(8) {
+	grid-area: four;
+}
+div > div:nth-of-type(9) {
+	grid-area: five;
+}
+div > div:nth-of-type(10) {
+	grid-area: six;
+}
+div > div:nth-of-type(11) {
+	grid-area: plus;
+}
+div > div:nth-of-type(12) {
+	grid-area: seven;
+}
+div > div:nth-of-type(13) {
+	grid-area: eight;
+}
+div > div:nth-of-type(14) {
+	grid-area: nine;
+}
+div > div:nth-of-type(15) {
+	grid-area: minus;
+}
+div > div:nth-of-type(16) {
+	grid-area: C;
+}
+div > div:nth-of-type(17) {
+	grid-area: divider;
+}
+div > div:nth-of-type(18) {
+	grid-area: multiplier;
+}
+div > div:nth-of-type(19) {
+	grid-area: eraser;
+}
+div > div:nth-of-type(20) {
+	grid-area: accumulator;
+}
+div > div:nth-of-type(21) {
+	grid-area: input;
+}
+
+.grey {
+	background-color: #f5f5f5;
+	color: #6784d9;
+}
