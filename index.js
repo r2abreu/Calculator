@@ -1,3 +1,5 @@
+import { noConsecutiveOperator, isPreceededByOperator, isOperator, eraseLastChar } from './helpers.js';
+
 let input = document.querySelector('.input');
 // let inputState = '';
 let interId = setInterval(setPrompt, 500);
@@ -72,17 +74,17 @@ function operatorHandle(value) {
 			noConsecutiveOperator(str, '÷');
 			return 'division';
 		case '=':
-			input.textContent += '=';
+			console.log('EQUAL OPERATOR');
 			return 'equal';
+		case '%':
+			noConsecutiveOperator(str, '%');
+			return 'percentual';
 		case '⧏':
 			input.textContent = eraseLastChar(input.textContent);
 			return 'erase';
 		case 'C':
 			input.textContent = '0';
 			return 'clear';
-		case '%':
-			input.textContent += '%';
-			return 'percentual';
 		default:
 			console.log('Operation Error');
 	}
@@ -101,52 +103,11 @@ function stopPrompt() {
 	input.style.borderRight = '';
 }
 
-function format(number) {
-	let nf = new Intl.NumberFormat();
-	return nf.format(number);
-}
-
 function calculate() {
 	const inputSplitted = input.textContent.split(/d*/);
 	const operators = inputSplitted.filter((digit) => isNaN(digit));
 	const operands = inputSplitted.map((digit) => parseInt(digit)).filter((digit) => !isNaN(digit));
 	if (operators[0] === '+') {
 		output.textContent = operands[0] + operands[1];
-	}
-}
-
-function eraseLastChar(str) {
-	if (str.length === 1) {
-		str = '0';
-	} else {
-		str = str.substring(0, str.length - 1);
-	}
-
-	return str;
-}
-
-function isPreceededByOperator(str) {
-	if (isOperator(str.charAt(str.length - 1))) {
-		return true;
-	}
-
-	return false;
-}
-
-function isOperator(char) {
-	if (char === '+' || char === '-' || char === '%' || char === 'x' || char === '÷' || char === '.') {
-		return true;
-	}
-
-	return false;
-}
-
-function noConsecutiveOperator(str, operator) {
-	if (isPreceededByOperator(str)) {
-		str = eraseLastChar(str);
-		str += operator;
-		input.textContent = str;
-	} else {
-		input.textContent += operator;
 	}
 }
