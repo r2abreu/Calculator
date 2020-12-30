@@ -113,6 +113,14 @@ div > div:nth-of-type(21) {
 	grid-area: input;
 }
 
+.input {
+	justify-self: flex-end;
+	margin-right: 0.5em;
+	margin-top: 0.2em;
+	max-width: 400px;
+	font-size: 2rem;
+}
+
 .grey {
 	background-color: #f5f5f5;
 	color: #6784d9;
