@@ -29,7 +29,6 @@ function handleClick() {
 }
 
 function numericalHandle(value) {
-	console.log(value);
 	// If the length of the string is longer than 14 characters
 	if (input.textContent.length < 14) {
 		// If the value is 0 and the string is longer `than 1 digit
@@ -71,8 +70,11 @@ function operatorHandle(value) {
 		case '÷':
 			noConsecutiveOperator(str, '÷');
 			return 'division';
+		case '%':
+			noConsecutiveOperator(str, '%');
+			return 'percentual';
 		case '=':
-			input.textContent += '=';
+			console.log('EQUAL OPERATOR');
 			return 'equal';
 		case '⧏':
 			input.textContent = eraseLastChar(input.textContent);
@@ -80,9 +82,6 @@ function operatorHandle(value) {
 		case 'C':
 			input.textContent = '0';
 			return 'clear';
-		case '%':
-			input.textContent += '%';
-			return 'percentual';
 		default:
 			console.log('Operation Error');
 	}
