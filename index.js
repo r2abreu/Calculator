@@ -1,3 +1,5 @@
+import { noConsecutiveOperator, eraseLastChar } from './helpers.js';
+
 let input = document.querySelector('.input');
 // let inputState = '';
 let interId = setInterval(setPrompt, 500);
@@ -29,7 +31,6 @@ function handleClick() {
 }
 
 function numericalHandle(value) {
-	console.log(value);
 	// If the length of the string is longer than 14 characters
 	if (input.textContent.length < 14) {
 		// If the value is 0 and the string is longer `than 1 digit
@@ -71,8 +72,11 @@ function operatorHandle(value) {
 		case '÷':
 			noConsecutiveOperator(str, '÷');
 			return 'division';
+		case '%':
+			noConsecutiveOperator(str, '%');
+			return 'percentual';
 		case '=':
-			input.textContent += '=';
+			console.log('EQUAL OPERATOR');
 			return 'equal';
 		case '⧏':
 			input.textContent = eraseLastChar(input.textContent);
@@ -80,9 +84,6 @@ function operatorHandle(value) {
 		case 'C':
 			input.textContent = '0';
 			return 'clear';
-		case '%':
-			input.textContent += '%';
-			return 'percentual';
 		default:
 			console.log('Operation Error');
 	}
@@ -112,41 +113,5 @@ function calculate() {
 	const operands = inputSplitted.map((digit) => parseInt(digit)).filter((digit) => !isNaN(digit));
 	if (operators[0] === '+') {
 		output.textContent = operands[0] + operands[1];
-	}
-}
-
-function eraseLastChar(str) {
-	if (str.length === 1) {
-		str = '0';
-	} else {
-		str = str.substring(0, str.length - 1);
-	}
-
-	return str;
-}
-
-function isPreceededByOperator(str) {
-	if (isOperator(str.charAt(str.length - 1))) {
-		return true;
-	}
-
-	return false;
-}
-
-function isOperator(char) {
-	if (char === '+' || char === '-' || char === '%' || char === 'x' || char === '÷' || char === '.') {
-		return true;
-	}
-
-	return false;
-}
-
-function noConsecutiveOperator(str, operator) {
-	if (isPreceededByOperator(str)) {
-		str = eraseLastChar(str);
-		str += operator;
-		input.textContent = str;
-	} else {
-		input.textContent += operator;
 	}
 }
