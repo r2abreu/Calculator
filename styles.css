@@ -125,3 +125,14 @@ div > div:nth-of-type(21) {
 	background-color: #f5f5f5;
 	color: #6784d9;
 }
+
+h2:first-of-type {
+	position: fixed;
+	right: 200px;
+}
+
+h2:last-of-type {
+	position: fixed;
+	right: 200px;
+	top: 90px;
+}

@@ -1,5 +1,3 @@
-let input = document.querySelector('.input');
-
 function eraseLastChar(str) {
 	if (str.length === 1) {
 		str = '0';
@@ -29,11 +27,10 @@ function isOperator(char) {
 function noConsecutiveOperator(str, operator) {
 	if (isPreceededByOperator(str)) {
 		str = eraseLastChar(str);
-		str += operator;
-		input.textContent = str;
-	} else {
-		input.textContent += operator;
+		return str;
 	}
+	str += operator;
+	return str;
 }
 
 function findNeighbours(string, character) {
