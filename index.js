@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { noConsecutiveOperator, eraseLastChar } from './helpers.js';
+=======
+import { noConsecutiveOperator, isPreceededByOperator, isOperator, eraseLastChar } from './helpers.js';
+>>>>>>> fd3356a29d56b37a2010eeba33b0b827ba4336de
 
 let input = document.querySelector('.input');
 // let inputState = '';
@@ -78,6 +82,9 @@ function operatorHandle(value) {
 		case '=':
 			console.log('EQUAL OPERATOR');
 			return 'equal';
+		case '%':
+			noConsecutiveOperator(str, '%');
+			return 'percentual';
 		case '⧏':
 			input.textContent = eraseLastChar(input.textContent);
 			return 'erase';
@@ -100,11 +107,6 @@ function setPrompt() {
 function stopPrompt() {
 	clearInterval(interId);
 	input.style.borderRight = '';
-}
-
-function format(number) {
-	let nf = new Intl.NumberFormat();
-	return nf.format(number);
 }
 
 function calculate() {
