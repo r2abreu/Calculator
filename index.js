@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { noConsecutiveOperator, eraseLastChar } from './helpers.js';
-=======
-import { noConsecutiveOperator, isPreceededByOperator, isOperator, eraseLastChar } from './helpers.js';
->>>>>>> fd3356a29d56b37a2010eeba33b0b827ba4336de
 
 let input = document.querySelector('.input');
 // let inputState = '';
