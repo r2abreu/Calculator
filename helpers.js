@@ -36,4 +36,16 @@ function noConsecutiveOperator(str, operator) {
 	}
 }
 
-export { noConsecutiveOperator, eraseLastChar };
+function findNeighbours(string, character) {
+	if (string.endsWith(character)) {
+		console.log('Previous', string.charAt(string.length - 2));
+	} else if (string.startsWith(character)) {
+		console.log('Next', string.charAt(1));
+	} else {
+		let previous = string.charAt(string.indexOf(character) - 1);
+		let next = string.charAt(string.indexOf(character) + 1);
+		return [ previous, next ];
+	}
+}
+
+export { noConsecutiveOperator, eraseLastChar, isOperator, findNeighbours };

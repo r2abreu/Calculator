@@ -1,8 +1,8 @@
-import { noConsecutiveOperator, eraseLastChar } from './helpers.js';
+import { noConsecutiveOperator, eraseLastChar, isOperator, findNeighbours } from './helpers.js';
 
 let input = document.querySelector('.input');
 // let inputState = '';
-let interId = setInterval(setPrompt, 500);
+// let interId = setInterval(setPrompt, 500);
 let output = document.querySelector('.output');
 
 (function() {
@@ -10,7 +10,7 @@ let output = document.querySelector('.output');
 	buttons.forEach((button) => {
 		button.addEventListener('click', handleClick);
 	});
-	setPrompt();
+	// setPrompt();
 	input.textContent = 0;
 
 	input.addEventListener('change', calculate);
@@ -21,11 +21,11 @@ function handleClick() {
 	// If the button's value is not a number
 	if (isNaN(buttonValue)) {
 		operatorHandle(this.firstChild.textContent);
+
 		// If the button's value is a number
 	} else {
 		if (buttonValue || buttonValue === 0) {
 			numericalHandle(buttonValue);
-			calculate();
 		}
 	}
 }
@@ -50,6 +50,7 @@ function numericalHandle(value) {
 	} else {
 		stopPrompt();
 	}
+	calculate();
 }
 
 function operatorHandle(value) {
@@ -62,29 +63,38 @@ function operatorHandle(value) {
 			return 'decimal';
 		case '+':
 			noConsecutiveOperator(str, '+');
+			calculate();
 			return 'addition';
 		case '-':
 			noConsecutiveOperator(str, '-');
+			calculate();
 			return 'substraction';
 		case 'x':
 			noConsecutiveOperator(str, 'x');
+			calculate();
 			return 'multiplication';
 		case '÷':
 			noConsecutiveOperator(str, '÷');
+			calculate();
 			return 'division';
 		case '%':
 			noConsecutiveOperator(str, '%');
+			calculate();
 			return 'percentual';
 		case '=':
 			console.log('EQUAL OPERATOR');
+			calculate();
 			return 'equal';
 		case '%':
 			noConsecutiveOperator(str, '%');
+			calculate();
 			return 'percentual';
 		case '⧏':
 			input.textContent = eraseLastChar(input.textContent);
+			calculate();
 			return 'erase';
 		case 'C':
+			output.textContent = '';
 			input.textContent = '0';
 			return 'clear';
 		default:
@@ -92,24 +102,44 @@ function operatorHandle(value) {
 	}
 }
 
-function setPrompt() {
-	if (input.style.borderRight === '1px solid transparent') {
-		input.style.borderRight = '1px solid #6784d9';
-	} else {
-		input.style.borderRight = '1px solid transparent';
-	}
-}
+// function setPrompt() {
+// 	if (input.style.borderRight === '1px solid transparent') {
+// 		input.style.borderRight = '1px solid #6784d9';
+// 	} else {
+// 		input.style.borderRight = '1px solid transparent';
+// 	}
+// }
 
-function stopPrompt() {
-	clearInterval(interId);
-	input.style.borderRight = '';
-}
+// function stopPrompt() {
+// 	clearInterval(interId);
+// 	input.style.borderRight = '';
+// }
 
 function calculate() {
-	const inputSplitted = input.textContent.split(/d*/);
-	const operators = inputSplitted.filter((digit) => isNaN(digit));
-	const operands = inputSplitted.map((digit) => parseInt(digit)).filter((digit) => !isNaN(digit));
-	if (operators[0] === '+') {
-		output.textContent = operands[0] + operands[1];
+	console.log('trigger');
+	let str = input.textContent;
+	const operands = str.match(/(^[0-9]*\+[0-9]*)*/g);
+	const operators = str.match(/[^0-9]+/g);
+	console.log(operands);
+	if (operands.length >= 2) {
+		switch (operators[0]) {
+			case 'x':
+				output.textContent = findNeighbours(str, 'x').reduce((acc, curr) => acc * curr);
+				break;
+			case '÷':
+				output.textContent = operands[0] * operands[1] / 100;
+				break;
+			case '+':
+				output.textContent = operands.reduce((acc, curr) => acc + curr);
+				break;
+			case '-':
+				output.textContent = operands[0] - operands[1];
+				break;
+			case '%':
+				output.textContent = operands[0] / operands[1];
+				break;
+		}
+	} else {
+		output.textContent = '';
 	}
 }
