@@ -3,6 +3,8 @@ let input = document.querySelector('.input');
 let interId = setInterval(setPrompt, 500);
 let output = document.querySelector('.output');
 
+// IIFE register event listeners
+
 (function() {
 	let buttons = document.querySelectorAll('div > div:not(:last-of-type):not(:nth-of-type(20)');
 	buttons.forEach((button) => {
