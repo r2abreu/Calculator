@@ -1,10 +1,9 @@
-import { noConsecutiveOperator, eraseLastChar } from './helpers.js';
+import { eraseLastChar } from './helpers.js';
 
 let input = document.querySelector('.input');
-// let inputState = '';
-// let interId = setInterval(setPrompt, 500);
-let showResult = true;
 let output = document.querySelector('.output');
+let showResult = true;
+// let interId = setInterval(setPrompt, 500);
 
 (function() {
 	let buttons = document.querySelectorAll('div > div:not(:last-of-type):not(:nth-of-type(20)');
@@ -16,12 +15,12 @@ let output = document.querySelector('.output');
 })();
 
 function handleClick() {
-	let buttonValue = parseInt(this.firstChild.textContent);
-	// If the button's value is not a number
+	let buttonValue = this.firstChild.textContent;
 	if (isNaN(buttonValue)) {
+		// If the button's value is not a number
 		operatorHandle(this.firstChild.textContent);
-		// If the button's value is a number
 	} else {
+		// If the button's value is a number
 		if (buttonValue || buttonValue === 0) {
 			numericalHandle(buttonValue);
 		}
@@ -37,31 +36,24 @@ function operatorHandle(value) {
 	} else if (value === '=') {
 		calculate();
 	} else {
-		if (value === '+' && showResult) {
-			output.textContent += input.textContent;
-		} else if (value === '+' && !showResult) {
-			output.textContent = input.textContent;
-		}
-		output.textContent += '+';
-		input.textContent = '0';
-		showResult = true;
+		determineOperation(value);
 	}
 }
 
 function numericalHandle(value) {
-	// If the length of the string is longer than 14 characters
 	if (input.textContent.length < 14) {
-		// If the value is 0 and the string is longer `than 1 digit
+		// If the length of the string is shorter than 14 characters
 		if (value === 0 && input.textContent.length > 1) {
-			input.textContent += value.toString();
-			// If the value is 0 and the string ends in 0
+			// If the value is 0 and the string is longer than 1 digit
+			input.textContent += value;
 		} else if (value === 0 && input.textContent.endsWith('0')) {
-			input.textContent = value.toString();
+			// If the value is 0 and the string ends in 0
+			input.textContent = value;
 		} else {
 			if (input.textContent.charAt(0) === '0') {
-				input.textContent = value.toString();
+				input.textContent = value;
 			} else {
-				input.textContent += value.toString();
+				input.textContent += value;
 			}
 		}
 		// input.textContent = format(inputState);
@@ -94,4 +86,29 @@ function calculate() {
 		}
 	}
 	showResult = false;
+}
+
+function determineOperation(value) {
+	if (value === '+') {
+		handleSum(value);
+	} else if (value === '-') {
+		handleSubstraction();
+	} else if (value === 'x') {
+		handleMultiplication();
+	} else if (value === '÷') {
+		handleDivision();
+	} else {
+		handlePercentual();
+	}
+	output.textContent += value;
+	input.textContent = '0';
+	showResult = true;
+}
+
+function handleSum() {
+	if (showResult) {
+		output.textContent += input.textContent;
+	} else if (!showResult) {
+		output.textContent = input.textContent;
+	}
 }
