@@ -35,6 +35,10 @@ function operatorHandle(value) {
 		input.textContent = '0';
 	} else if (value === '=') {
 		calculate();
+	} else if (value === '.') {
+		if (!input.textContent.endsWith('.') && !input.textContent.includes('.')) {
+			input.textContent += '.';
+		}
 	} else {
 		showOperator(value);
 	}
@@ -50,8 +54,13 @@ function numericalHandle(value) {
 			// If the value is 0 and the string ends in 0
 			input.textContent = value;
 		} else {
+			// Si el primer caracter es un cero
 			if (input.textContent.charAt(0) === '0') {
-				input.textContent = value;
+				if (input.textContent.includes('.')) {
+					input.textContent += value;
+				} else {
+					input.textContent = value;
+				}
 			} else {
 				input.textContent += value;
 			}
@@ -77,7 +86,12 @@ function stopPrompt() {
 
 function showOperator(value) {
 	if (showResult) {
-		output.textContent += input.textContent;
+		// If the string ends and starts with zero, just show a zero
+		if (input.textContent.endsWith('0') && input.textContent.startsWith('0')) {
+			output.textContent += '0';
+		} else {
+			output.textContent += input.textContent;
+		}
 	} else if (!showResult) {
 		output.textContent = input.textContent;
 	}
@@ -104,6 +118,8 @@ function determineOperationResult(str, operands) {
 		return handleSubstraction(operands);
 	} else if (str.includes('x')) {
 		return handleMultiplication(operands);
+	} else if (str.includes('%')) {
+		return handlePercentage(operands);
 	} else {
 		return handleDivision(operands);
 	}
@@ -117,19 +133,23 @@ function handleSubstraction(operands) {
 	return operands.reduce((acc, curr) => acc - curr);
 }
 function handleMultiplication(operands) {
-	console.log(operands);
 	return operands.reduce((acc, curr) => acc * curr);
 }
 function handleDivision(operands) {
 	return operands.reduce((acc, curr) => acc / curr);
 }
 
+function handlePercentage(operands) {
+	return operands[0] / 100 * operands[1];
+}
+
 function filterOperands(str) {
-	let splittedString = str.split(/((?:^\-?\d+)|(?:(?<=[-+÷x])(?:\-?\d+)))/);
+	let splittedString = str.split(/((?:^\-?[\d\.]+)|(?:(?<=[-+÷%x])(?:\-?\d+)))/);
+	console.log(splittedString);
 	let filteredString = splittedString.filter((digit) => {
 		return !isNaN(parseInt(digit));
 	});
-	let parsedString = filteredString.map((digit) => parseInt(digit));
+	let parsedString = filteredString.map((digit) => parseFloat(digit));
 	return parsedString;
 }
 
