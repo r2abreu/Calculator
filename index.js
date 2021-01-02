@@ -36,7 +36,7 @@ function operatorHandle(value) {
 	} else if (value === '=') {
 		calculate();
 	} else {
-		determineOperation(value);
+		showOperator(value);
 	}
 }
 
@@ -75,40 +75,59 @@ function stopPrompt() {
 	input.style.borderRight = '';
 }
 
-function calculate() {
+function showOperator(value) {
 	if (showResult) {
 		output.textContent += input.textContent;
-		let str = output.textContent;
-		const operands = str.split('+').map((digit) => parseInt(digit));
-		console.log(operands);
-		if (str.includes('+')) {
-			input.textContent = operands.reduce((acc, curr) => acc + curr);
-		}
-	}
-	showResult = false;
-}
-
-function determineOperation(value) {
-	if (value === '+') {
-		handleSum(value);
-	} else if (value === '-') {
-		handleSubstraction();
-	} else if (value === 'x') {
-		handleMultiplication();
-	} else if (value === '÷') {
-		handleDivision();
-	} else {
-		handlePercentual();
+	} else if (!showResult) {
+		output.textContent = input.textContent;
 	}
 	output.textContent += value;
 	input.textContent = '0';
 	showResult = true;
 }
 
-function handleSum() {
+function calculate() {
 	if (showResult) {
 		output.textContent += input.textContent;
-	} else if (!showResult) {
-		output.textContent = input.textContent;
+		let str = output.textContent;
+		const operands = filterOperands(str);
+		console.log(operands);
+		input.textContent = determineOperationResult(str, operands);
 	}
+	showResult = false;
+}
+
+function determineOperationResult(str, operands) {
+	if (str.includes('+')) {
+		return handleSum(operands);
+	} else if (str.includes('-')) {
+		return handleSubstraction(operands);
+	} else if (str.includes('x')) {
+		return handleMultiplication(operands);
+	} else {
+		return handleDivision(operands);
+	}
+}
+
+function handleSum(operands) {
+	return operands.reduce((acc, curr) => acc + curr);
+}
+
+function handleSubstraction(operands) {
+	return operands.reduce((acc, curr) => acc - curr);
+}
+function handleMultiplication(operands) {
+	return operands.reduce((acc, curr) => acc * curr);
+}
+function handleDivision(operands) {
+	return operands.reduce((acc, curr) => acc / curr);
+}
+
+function filterOperands(str) {
+	let splittedString = str.split(/((?:^\-?\d+)|(?:(?<=[-+/*])(?:\-?\d+)))/);
+	let filteredString = splittedString.filter((digit) => {
+		return !isNaN(parseInt(digit));
+	});
+	let parsedString = filteredString.map((digit) => parseInt(digit));
+	return parsedString;
 }
