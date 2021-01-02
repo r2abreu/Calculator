@@ -1,4 +1,4 @@
-import { eraseLastChar } from './helpers.js';
+import { eraseLastChar, isOperator } from './helpers.js';
 
 let input = document.querySelector('.input');
 let output = document.querySelector('.output');
@@ -94,6 +94,10 @@ function showOperator(value) {
 		}
 	} else if (!showResult) {
 		output.textContent = input.textContent;
+	}
+
+	if (input.textContent.endsWith('+')) {
+		console.log('trigger');
 	}
 	output.textContent += value;
 	input.textContent = '0';
