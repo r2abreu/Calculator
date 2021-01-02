@@ -4,7 +4,7 @@
 
 This calculator visually replicates the calculator of my current phone and some of it's functionality.
 
-![Huawei Calculator]('assets/calculator.jpg')
+![Huawei Calculator](assets/calculator.jpg)
 
 ## Installation 
 
