@@ -92,7 +92,7 @@ function calculate() {
 		let str = output.textContent;
 		const operands = filterOperands(str);
 		console.log(operands);
-		input.textContent = determineOperationResult(str, operands);
+		printResult(determineOperationResult(str, operands));
 	}
 	showResult = false;
 }
@@ -117,6 +117,7 @@ function handleSubstraction(operands) {
 	return operands.reduce((acc, curr) => acc - curr);
 }
 function handleMultiplication(operands) {
+	console.log(operands);
 	return operands.reduce((acc, curr) => acc * curr);
 }
 function handleDivision(operands) {
@@ -124,10 +125,25 @@ function handleDivision(operands) {
 }
 
 function filterOperands(str) {
-	let splittedString = str.split(/((?:^\-?\d+)|(?:(?<=[-+/*])(?:\-?\d+)))/);
+	let splittedString = str.split(/((?:^\-?\d+)|(?:(?<=[-+÷x])(?:\-?\d+)))/);
 	let filteredString = splittedString.filter((digit) => {
 		return !isNaN(parseInt(digit));
 	});
 	let parsedString = filteredString.map((digit) => parseInt(digit));
 	return parsedString;
+}
+
+function handleError(str) {
+	input.textContent = str;
+	setTimeout(() => {
+		input.textContent = '0';
+	}, 2000);
+}
+
+function printResult(result) {
+	if (result === Infinity) {
+		handleError('Do not divide by zero!');
+	} else {
+		input.textContent = result;
+	}
 }
