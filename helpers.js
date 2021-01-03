@@ -34,14 +34,23 @@ function noConsecutiveOperator(str, operator) {
 }
 
 function findNeighbours(string, character) {
-	if (string.endsWith(character)) {
-		console.log('Previous', string.charAt(string.length - 2));
-	} else if (string.startsWith(character)) {
-		console.log('Next', string.charAt(1));
-	} else {
-		let previous = string.charAt(string.indexOf(character) - 1);
-		let next = string.charAt(string.indexOf(character) + 1);
-		return [ previous, next ];
+	if (string.includes(character)) {
+		if (string.endsWith(character)) {
+			console.log('Previous', string.charAt(string.length - 2));
+		} else if (string.startsWith(character)) {
+			console.log('Next', string.charAt(1));
+		} else {
+			let regex = `[0-9]*${character}[0-9]*`;
+			let regConstructor = new RegExp(regex, 'g');
+
+			let operation = string.match(regConstructor).join();
+			let operands = operation.split(character);
+
+			let previous = parseFloat(operands[0]);
+			let next = parseFloat(operands[1]);
+
+			return [ previous, next ];
+		}
 	}
 }
 

@@ -1,4 +1,4 @@
-import { eraseLastChar, isOperator } from './helpers.js';
+import { eraseLastChar, isOperator, findNeighbours } from './helpers.js';
 
 let input = document.querySelector('.input');
 let output = document.querySelector('.output');
@@ -119,9 +119,50 @@ function calculate() {
 		output.textContent += input.textContent;
 		let str = output.textContent;
 		const operands = filterOperands(str);
+		reduceOperation(str);
 		printResult(determineOperationResult(str, operands));
 	}
 	showResult = false;
+}
+
+function reduceOperation(str) {
+	let resultStr = '';
+
+	if (str.includes('x')) {
+		let regex = /([0-9]*x[0-9]*)/g;
+		let multiplicationOperands = findNeighbours(str, 'x');
+		let multiplication = handleMultiplication(multiplicationOperands);
+		resultStr = str.replace(regex, `${multiplication}`);
+	}
+
+	if (str.includes('÷')) {
+		let regex = /[0-9]*÷[0-9]*/g;
+		let divisionOperands = findNeighbours(str, '÷');
+		let division = handleDivision(divisionOperands);
+		resultStr = str.replace(regex, `${division}`);
+	}
+
+	// if (str.includes('+')) {
+	// 	let regex = /[0-9]*\+[0-9]*/g;
+	// 	let sumOperands = findNeighbours(str, '+');
+	// 	let sum = handleSum(sumOperands);
+	// 	resultStr = resultStr.replace(regex, `${sum}`);
+	// }
+
+	// if (str.includes('-')) {
+	// 	let regex = /[0-9]*-[0-9]*/g;
+	// 	let substractionOperands = findNeighbours(str, '-');
+	// 	let substraction = handleSubstraction(substractionOperands);
+	// 	resultStr = resultStr.replace(regex, `${substraction}`);
+	// }
+
+	// sumOperands = findNeighbours(string, '+');
+	// substractionOperands = findNeighbours(string, '-');
+
+	// sum = handleSum(sumOperands);
+	// substraction = (handleSubstraction(substractionOperands));
+
+	console.log(resultStr);
 }
 
 function determineOperationResult(str, operands) {
@@ -158,7 +199,6 @@ function handlePercentage(operands) {
 
 function filterOperands(str) {
 	let splittedString = str.split(/((?:^\-?[\d\.]+)|(?:(?<=[-+÷%x])(?:\-?\d+)))/);
-	console.log(splittedString);
 	let filteredString = splittedString.filter((digit) => {
 		return !isNaN(parseInt(digit));
 	});
