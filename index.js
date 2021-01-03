@@ -112,6 +112,7 @@ function calculate() {
 		let str = output.textContent;
 		let reducedOperation = reduceOperation(str);
 		let operands = filterOperands(reducedOperation);
+		console.log(operands);
 		printResult(finalReduce(str, operands));
 	}
 	showResult = false;
@@ -119,6 +120,17 @@ function calculate() {
 
 function reduceOperation(str) {
 	let resultStr = '';
+
+	if (str.includes('%')) {
+		let regex = /([0-9]*%[0-9]*)/g;
+		let percentageOperands = findNeighbours(str, '%');
+		let percentage = handlePercentage(percentageOperands);
+		if (!resultStr) {
+			resultStr = str.replace(regex, `${percentage}`);
+		} else {
+			resultStr = resultStr.replace(regex, `${percentage}`);
+		}
+	}
 
 	if (str.includes('x')) {
 		let regex = /([0-9]*x[0-9]*)/g;
@@ -151,6 +163,8 @@ function finalReduce(str, operands) {
 	} else if (str.includes('-')) {
 		return handleSubstraction(operands);
 	}
+
+	return operands;
 }
 
 function handleSum(operands) {
@@ -173,7 +187,6 @@ function handlePercentage(operands) {
 
 function filterOperands(str) {
 	let splittedString = str.split(/((?:^\-?[\d\.]+)|(?:(?<=[-+÷%x])(?:\-?[\d\.]+)))/);
-	console.log(splittedString);
 	let filteredString = splittedString.filter((digit) => {
 		return !isNaN(parseInt(digit));
 	});
