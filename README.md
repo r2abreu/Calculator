@@ -12,7 +12,7 @@ There's no installation required.
 
 ## Usage 
 
-Currently the calculator only allows clicked inputs, select the operands, operators and then press the equal sign to print the calculation. 
+Currently the calculator only allows clicked inputs. Select the operands, operators and then press the equal sign to print the calculation. 
 
 ## License 
 

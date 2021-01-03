@@ -86,20 +86,30 @@ function stopPrompt() {
 
 function showOperator(value) {
 	if (showResult) {
-		// If the string ends and starts with zero, just show a zero
-		if (input.textContent.endsWith('0') && input.textContent.startsWith('0')) {
-			output.textContent += '0';
+		if (input.textContent === '0') {
+			output.textContent = `0${value}`;
+		} else if (
+			input.textContent.endsWith('0') &&
+			input.textContent.startsWith('0') &&
+			input.textContent.length > 1
+		) {
+			output.textContent = `0${value}`;
+			input.textContent = '0';
 		} else {
-			output.textContent += input.textContent;
+			output.textContent += `${input.textContent}${value}`;
+			input.textContent = '0';
 		}
-	} else if (!showResult) {
-		output.textContent = input.textContent;
+		// If the string ends and starts with zero, just show a zero
+		// if (input.textContent.endsWith('0') && input.textContent.startsWith('0') && input.textContent.length > 1) {
+		// 	output.textContent += '0';
+		// } else {
+		// 	output.textContent += input.textContent;
+		// }
+		// } else if (!showResult) {
+		// 	output.textContent = input.textContent;
+	} else {
+		output.textContent = `${input.textContent}${value}`;
 	}
-
-	if (input.textContent.endsWith('+')) {
-		console.log('trigger');
-	}
-	output.textContent += value;
 	input.textContent = '0';
 	showResult = true;
 }
@@ -109,7 +119,6 @@ function calculate() {
 		output.textContent += input.textContent;
 		let str = output.textContent;
 		const operands = filterOperands(str);
-		console.log(operands);
 		printResult(determineOperationResult(str, operands));
 	}
 	showResult = false;

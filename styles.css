@@ -134,7 +134,7 @@ h2:first-of-type {
 h2:last-of-type {
 	position: fixed;
 	right: 200px;
-	top: 90px;
+	top: 200px;
 }
 
 .error {
