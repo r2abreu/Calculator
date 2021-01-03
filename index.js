@@ -99,14 +99,6 @@ function showOperator(value) {
 			output.textContent += `${input.textContent}${value}`;
 			input.textContent = '0';
 		}
-		// If the string ends and starts with zero, just show a zero
-		// if (input.textContent.endsWith('0') && input.textContent.startsWith('0') && input.textContent.length > 1) {
-		// 	output.textContent += '0';
-		// } else {
-		// 	output.textContent += input.textContent;
-		// }
-		// } else if (!showResult) {
-		// 	output.textContent = input.textContent;
 	} else {
 		output.textContent = `${input.textContent}${value}`;
 	}
@@ -118,9 +110,9 @@ function calculate() {
 	if (showResult) {
 		output.textContent += input.textContent;
 		let str = output.textContent;
-		const operands = filterOperands(str);
-		reduceOperation(str);
-		printResult(determineOperationResult(str, operands));
+		let reducedOperation = reduceOperation(str);
+		let operands = filterOperands(reducedOperation);
+		printResult(finalReduce(str, operands));
 	}
 	showResult = false;
 }
@@ -132,50 +124,32 @@ function reduceOperation(str) {
 		let regex = /([0-9]*x[0-9]*)/g;
 		let multiplicationOperands = findNeighbours(str, 'x');
 		let multiplication = handleMultiplication(multiplicationOperands);
-		resultStr = str.replace(regex, `${multiplication}`);
+		if (!resultStr) {
+			resultStr = str.replace(regex, `${multiplication}`);
+		} else {
+			resultStr = resultStr.replace(regex, `${multiplication}`);
+		}
 	}
 
 	if (str.includes('÷')) {
 		let regex = /[0-9]*÷[0-9]*/g;
 		let divisionOperands = findNeighbours(str, '÷');
 		let division = handleDivision(divisionOperands);
-		resultStr = str.replace(regex, `${division}`);
+		if (!resultStr) {
+			resultStr = str.replace(regex, `${division}`);
+		} else {
+			resultStr = resultStr.replace(regex, `${division}`);
+		}
 	}
 
-	// if (str.includes('+')) {
-	// 	let regex = /[0-9]*\+[0-9]*/g;
-	// 	let sumOperands = findNeighbours(str, '+');
-	// 	let sum = handleSum(sumOperands);
-	// 	resultStr = resultStr.replace(regex, `${sum}`);
-	// }
-
-	// if (str.includes('-')) {
-	// 	let regex = /[0-9]*-[0-9]*/g;
-	// 	let substractionOperands = findNeighbours(str, '-');
-	// 	let substraction = handleSubstraction(substractionOperands);
-	// 	resultStr = resultStr.replace(regex, `${substraction}`);
-	// }
-
-	// sumOperands = findNeighbours(string, '+');
-	// substractionOperands = findNeighbours(string, '-');
-
-	// sum = handleSum(sumOperands);
-	// substraction = (handleSubstraction(substractionOperands));
-
-	console.log(resultStr);
+	return resultStr ? resultStr : str;
 }
 
-function determineOperationResult(str, operands) {
+function finalReduce(str, operands) {
 	if (str.includes('+')) {
 		return handleSum(operands);
 	} else if (str.includes('-')) {
 		return handleSubstraction(operands);
-	} else if (str.includes('x')) {
-		return handleMultiplication(operands);
-	} else if (str.includes('%')) {
-		return handlePercentage(operands);
-	} else {
-		return handleDivision(operands);
 	}
 }
 
@@ -198,10 +172,12 @@ function handlePercentage(operands) {
 }
 
 function filterOperands(str) {
-	let splittedString = str.split(/((?:^\-?[\d\.]+)|(?:(?<=[-+÷%x])(?:\-?\d+)))/);
+	let splittedString = str.split(/((?:^\-?[\d\.]+)|(?:(?<=[-+÷%x])(?:\-?[\d\.]+)))/);
+	console.log(splittedString);
 	let filteredString = splittedString.filter((digit) => {
 		return !isNaN(parseInt(digit));
 	});
+
 	let parsedString = filteredString.map((digit) => parseFloat(digit));
 	return parsedString;
 }
