@@ -3,14 +3,14 @@ import { eraseLastChar, isOperator, findNeighbours } from './helpers.js';
 let input = document.querySelector('.input');
 let output = document.querySelector('.output');
 let showResult = true;
-// let interId = setInterval(setPrompt, 500);
+let interId = setInterval(setPrompt, 500);
 
 (function() {
 	let buttons = document.querySelectorAll('div > div:not(:last-of-type):not(:nth-of-type(20)');
 	buttons.forEach((button) => {
 		button.addEventListener('click', handleClick);
 	});
-	// setPrompt();
+	setPrompt();
 	input.textContent = 0;
 })();
 
